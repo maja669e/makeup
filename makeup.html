@@ -10,6 +10,7 @@
     <style>
         body {
             margin: 0;
+            font-family: 'Lato', sans-serif;
         }
 
 
@@ -51,8 +52,7 @@
 
 
         h1 {
-            max-width: 1080px;
-            margin: 0 auto;
+            margin: 0;
             text-align: center;
         }
 
@@ -78,18 +78,21 @@
         }
 
         header {
+            background-image: linear-gradient(to right, #a784ac, #c6aac9, #d9c2dc);
             width: 100%;
-            background-image: linear-gradient(to right, #c44e4e, #e0b3b3);
+            font-family: 'Cinzel Decorative', cursive;
+            color: white;
+            font-size: 50px;
             display: flex;
             flex-wrap: wrap;
-            text-align: left;
+            justify-content: center;
         }
 
 
         nav {
             text-align: center;
             width: 100%;
-            background-image: linear-gradient(to right, #c44e4e, #e0b3b3);
+            background-image: linear-gradient(to right, #a784ac, #c6aac9, #d9c2dc);
         }
 
         .filter {
@@ -100,7 +103,7 @@
             padding: 10px;
             cursor: pointer;
             border-right: 1px solid white;
-            font-family: "Times New Roman", Times, serif;
+            font-family: 'Lato', sans-serif;
             text-transform: uppercase;
 
         }
@@ -166,7 +169,7 @@
 <body>
 
     <header>
-        <p>FMK</p>
+        <h1>FMK</h1>
     </header>
 
     <nav>
@@ -239,7 +242,7 @@
         async function getJson() {
             let jsonData = await fetch("https://spreadsheets.google.com/feeds/list/14LiOhKxoK7RxtfsWL1sBrwbQIlCGx_ndJECwkmjlrBo/od6/public/values?alt=json");
             console.log("jsonData", jsonData);
-            retter = await jsonData.json();
+            makeup = await jsonData.json();
             console.log("makeup", makeup);
             addEventListenersToButtons();
             start();
@@ -255,7 +258,7 @@
                     klon.querySelector("h2").textContent = makeup.gsx$mærke.$t;
                     klon.querySelector("h3").textContent = makeup.gsx$navn.$t;
                     klon.querySelector(".pris").textContent = `${makeup.gsx$pris.$t},-`;
-                    klon.querySelector("img").src = `large/${makeup.gsx$billede.$t}.jpg`;
+                    klon.querySelector("img").src = `billeder/${makeup.gsx$billede.$t}.jpg`;
                     listeMakeup.appendChild(klon);
                     listeMakeup.lastElementChild.addEventListener("click", () => {
                         visSingle(makeup);
@@ -271,7 +274,7 @@
             document.querySelector(".menu h2").textContent = makeup.gsx$navn.$t;
             document.querySelector(".menu .pris").textContent = `${makeup.gsx$pris.$t},-`;
             document.querySelector(".menu .menukort").textContent = makeup.gsx$lang.$t;
-            document.querySelector(".menu img").src = `large/${makeup.gsx$billede.$t}.jpg`;
+            document.querySelector(".menu img").src = `billeder/${makeup.gsx$billede.$t}.jpg`;
         }
 
         function lukSingle() {
