@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative|Lato&display=swap" rel="stylesheet">
+    <title>FMK</title>
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+
+        img {
+            width: 100%;
+        }
+
+        .liste {
+            text-align: center;
+            display: grid;
+            grid-gap: 10px;
+            grid-template-columns: repeat(1, 1fr);
+            max-width: 1080px;
+            margin: 0 auto;
+            color: white;
+            cursor: pointer;
+        }
+
+        article:nth-child(even) {
+            background-color: rgba(204, 132, 132, 0.69);
+        }
+
+        article:nth-child(odd) {
+            background-color: rgba(157, 193, 230, 0.69);
+
+        }
+
+        @media screen and (min-width:600px) {
+            .liste {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media screen and (min-width:960px) {
+            .liste {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+
+        h1 {
+            max-width: 1080px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+
+        footer {
+            background-color: #c8d0d3;
+            width: 100%;
+            color: white;
+            margin-top: 2vw;
+            font-style: italic;
+        }
+
+        #footer_info {
+            flex-wrap: wrap;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .adresse,
+        .tider {
+            margin: 2vw;
+        }
+
+        header {
+            width: 100%;
+            background-image: linear-gradient(to right, #c44e4e, #e0b3b3);
+            display: flex;
+            flex-wrap: wrap;
+            text-align: left;
+        }
+
+
+        nav {
+            text-align: center;
+            width: 100%;
+            background-image: linear-gradient(to right, #c44e4e, #e0b3b3);
+        }
+
+        .filter {
+            background-color: inherit;
+            color: white;
+            font-size: 20px;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-right: 1px solid white;
+            font-family: "Times New Roman", Times, serif;
+            text-transform: uppercase;
+
+        }
+
+        .filter:last-of-type {
+            border-right: none;
+        }
+
+        .filter:hover {
+            opacity: 0.2;
+        }
+
+
+        #popup {
+            position: fixed;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, .7);
+            display: none;
+            overflow: scroll;
+        }
+
+        .indhold {
+            width: 38vw;
+            min-height: 40vh;
+            margin: 4rem auto;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+
+
+        .luk {
+            position: fixed;
+            right: 0;
+            font-size: 2rem;
+            cursor: pointer;
+            background-color: transparent;
+            color: white;
+            border-radius: 50%;
+            border: none;
+        }
+
+        .luk:hover {
+            background-color: rgba(0, 0, 0, .4);
+        }
+
+        @media screen and (max-width: 700px) {
+            .indhold {
+                width: 65%;
+            }
+
+            .liste {
+                margin: 3vw;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <header>
+        <p>FMK</p>
+    </header>
+
+    <nav>
+        <button class="filter" data-kategori="alle">Alle</button>
+        <button class="filter" data-kategori="foundation">Foundation</button>
+        <button class="filter" data-kategori="øjenskygge">Øjenskygge</button>
+        <button class="filter" data-kategori="læbestift">Læbestift</button>
+        <button class="filter" data-kategori="lipgloss">Lipgloss</button>
+        <button class="filter" data-kategori="highlighter">Highlighter</button>
+        <button class="filter" data-kategori="blush">Blush</button>
+        <button class="filter" data-kategori="contour">Contour</button>
+        <button class="filter" data-kategori="mascara">Mascara</button>
+        <button class="filter" data-kategori="pudder">Pudder</button>
+
+    </nav>
+
+    <h1>Alle</h1>
+    <template>
+
+        <article>
+
+            <img src="" alt="">
+            <h2></h2>
+            <h3></h3>
+            <p class="pris"></p>
+
+
+        </article>
+    </template>
+
+    <div id="popup">
+        <button class="luk">X</button>
+        <section class="indhold">
+            <article class="menu">
+                <img class="billede" src="" alt="">
+                <h2></h2>
+                <p class="menukort"></p>
+                <p class="pris"></p>
+            </article>
+        </section>
+    </div>
+
+    <section class="liste"></section>
+
+    <footer>
+        <div id="footer_info">
+            <div class="adresse">
+                <p>Adresse:</p>
+                <p>Grønnegade 97</p>
+                <p>1234 København K</p>
+            </div>
+            <div class="tider">
+                <p>Åbningstider:</p>
+                <p>Mandag-fredag 10:30-22:00</p>
+                <p>Lørdag 12:00-23:00</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let makeup;
+        const temp = document.querySelector("template");
+        const listeMakeup = document.querySelector(".liste");
+        const theTemplatePointer = document.querySelector("#theTemplate");
+        let filter = "alle";
+
+
+        document.addEventListener("DOMContentLoaded", getJson);
+
+        async function getJson() {
+            let jsonData = await fetch("https://spreadsheets.google.com/feeds/list/14LiOhKxoK7RxtfsWL1sBrwbQIlCGx_ndJECwkmjlrBo/od6/public/values?alt=json");
+            console.log("jsonData", jsonData);
+            retter = await jsonData.json();
+            console.log("makeup", makeup);
+            addEventListenersToButtons();
+            start();
+        }
+
+
+        function start() {
+            listeMakeup.innerHTML = "";
+
+            makeup.feed.entry.forEach((makeup) => {
+                if (filter == "alle" || filter == makeup.gsx$kategori.$t) {
+                    const klon = temp.cloneNode(true).content;
+                    klon.querySelector("h2").textContent = makeup.gsx$mærke.$t;
+                    klon.querySelector("h3").textContent = makeup.gsx$navn.$t;
+                    klon.querySelector(".pris").textContent = `${makeup.gsx$pris.$t},-`;
+                    klon.querySelector("img").src = `large/${makeup.gsx$billede.$t}.jpg`;
+                    listeMakeup.appendChild(klon);
+                    listeMakeup.lastElementChild.addEventListener("click", () => {
+                        visSingle(makeup);
+                    });
+                }
+            })
+        }
+
+        function visSingle(makeup) {
+            document.querySelector("#popup").style.display = "block";
+            document.querySelector("#popup .luk").addEventListener("click", lukSingle);
+
+            document.querySelector(".menu h2").textContent = makeup.gsx$navn.$t;
+            document.querySelector(".menu .pris").textContent = `${makeup.gsx$pris.$t},-`;
+            document.querySelector(".menu .menukort").textContent = makeup.gsx$lang.$t;
+            document.querySelector(".menu img").src = `large/${makeup.gsx$billede.$t}.jpg`;
+        }
+
+        function lukSingle() {
+            document.querySelector("#popup").style.display = "none";
+        }
+
+        function addEventListenersToButtons() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+            })
+        }
+
+        function filtrering() {
+            filter = this.dataset.kategori;
+            document.querySelector("h1").textContent = this.textContent;
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.classList.remove("valgt");
+            })
+
+            start();
+        }
+    </script>
+
+
+</body>
+
+</html>
